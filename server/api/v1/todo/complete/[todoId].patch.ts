@@ -13,6 +13,6 @@ export default defineEventHandler(async (event) => {
     })
   }
   else {
-    setResponseStatus(event, 201)
+    setResponseStatus(event, 204)
   }
 })
