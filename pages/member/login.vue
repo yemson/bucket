@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { string, z } from 'zod'
+import { z } from 'zod'
 import type { FormError, FormSubmitEvent } from '#ui/types'
 
 definePageMeta({
   layout: false,
 })
 
-const supabase = useSupabaseClient()
-
 type Schema = z.output<typeof schema>
 
+const supabase = useSupabaseClient()
+const loginForm = ref()
 const state = reactive({
   email: '',
   password: '',
 })
-
 const isRememberId = ref(false)
 const isLoginLoading = ref(false)
 
@@ -55,7 +54,10 @@ async function signInWithEmail(loginData: FormSubmitEvent<Schema>) {
     password: loginData.data.password,
   })
 
-  if (error) { console.error(error) }
+  if (error) {
+    if (error.status === 400)
+      loginForm.value.errors.push({ path: 'password', message: '이메일 또는 비밀번호가 잘못되었습니다.' })
+  }
   else {
     localStorage.setItem('remember-id', loginData.data.email)
     navigateTo('/')
@@ -72,6 +74,7 @@ async function signInWithEmail(loginData: FormSubmitEvent<Schema>) {
         노트잇!
       </h1>
       <UForm
+        ref="loginForm"
         :validate="validate"
         :schema="schema"
         :state="state"
