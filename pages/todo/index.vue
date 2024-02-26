@@ -109,7 +109,7 @@ async function toggleTodoComplete(id: string) {
       v-for="todo in fetchData.todoList"
       :key="todo.id"
     >
-      <div class="flex justify-between text-lg gap-3 p-3 rounded-md hover:bg-gray-100">
+      <div class="flex justify-between text-lg gap-3 p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800/50">
         <div class="flex justify-between gap-3">
           <UCheckbox
             v-model="todo.is_complete"
