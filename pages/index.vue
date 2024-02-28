@@ -3,7 +3,13 @@
 </script>
 
 <template>
-  <div class="p-3 mx-auto">
-    Hello world!
+  <!-- <SectionFlicking /> -->
+  <div class="flex justify-end">
+    <UButton
+      to="/post/create"
+      variant="soft"
+      label="글쓰기"
+      icon="i-heroicons-plus"
+    />
   </div>
 </template>

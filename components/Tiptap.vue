@@ -1,0 +1,26 @@
+<script setup lang="ts">
+import { EditorContent, useEditor } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import type { Content } from '@tiptap/core'
+
+const modelValue = defineModel<Content>()
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+  ],
+  content: modelValue.value,
+  onUpdate({ editor }) {
+    modelValue.value = editor.getHTML()
+  },
+  editorProps: {
+    attributes: {
+      class: 'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none',
+    },
+  },
+})
+</script>
+
+<template>
+  <EditorContent :editor="editor" />
+</template>
