@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Flicking from '@egjs/vue3-flicking'
 import '@egjs/vue3-flicking/dist/flicking.css'
-import { AutoPlay, Perspective } from '@egjs/flicking-plugins'
+import { AutoPlay } from '@egjs/flicking-plugins'
 
 const props = defineProps({
   list: {
@@ -18,25 +18,29 @@ const options = ref({
 </script>
 
 <template>
-  <Flicking
-    :options="options"
-    :hide-before-init="true"
-    first-panel-size="256px"
-    class="w-full"
-    :plugins="plugin"
-  >
-    <div
-      v-for="(l, index) in props.list.data"
-      :key="index"
+  <ClientOnly>
+    <Flicking
+      :options="options"
+      first-panel-size="256px"
+      class="w-full rounded-md"
+      :plugins="plugin"
     >
       <div
-        class="w-64 h-96 bg-gray-100 rounded-md border scale-90 hover:scale-100 transition cursor-pointer p-3"
-        @click="navigateTo(`/post/${l.id}`)"
+        v-for="(l, index) in props.list.data"
+        :key="index"
       >
-        <div class="text-lg">
-          {{ l.title }}
+        <div
+          class="w-64 h-96 bg-gray-100 rounded-md border cursor-pointer p-3"
+          @click="navigateTo(`/post/${l.id}`)"
+        >
+          <div class="text-lg">
+            {{ l.title }}
+          </div>
         </div>
       </div>
-    </div>
-  </Flicking>
+    </Flicking>
+    <template #fallback>
+      <USkeleton class="w-full h-96" />
+    </template>
+  </ClientOnly>
 </template>

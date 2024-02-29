@@ -3,11 +3,16 @@ const route = useRoute()
 const content = ref()
 
 async function getContent() {
-  const data = await $fetch(`/api/v1/post/${route.params.postNo}`, {
-    method: 'GET',
-  })
+  try {
+    const data = await $fetch(`/api/v1/post/${route.params.postNo}`, {
+      method: 'GET',
+    })
 
-  content.value = data?.data.post_json
+    content.value = data?.data.post_json
+  }
+  catch (error) {
+    console.error(error)
+  }
 }
 
 onMounted(() => {

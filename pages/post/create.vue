@@ -61,6 +61,15 @@ async function createPost() {
         aria-label="Theme"
         @click="isDark = !isDark"
       />
+      <template #fallback>
+        <UButton
+          :loading="true"
+          color="gray"
+          variant="ghost"
+          size="xl"
+          aria-label="Theme"
+        />
+      </template>
     </ClientOnly>
   </header>
 

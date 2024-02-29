@@ -1,9 +1,24 @@
-<script setup>
-const { data, error } = useFetch('/api/v1/post')
+<script setup lang="ts">
+const postList = ref([])
+
+async function getPostList() {
+  try {
+    postList.value = await $fetch(`/api/v1/post`, {
+      method: 'GET',
+    })
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+onMounted(() => {
+  getPostList()
+})
 </script>
 
 <template>
-  <div class="flex justify-end">
+  <div class="flex justify-end mb-3">
     <UButton
       to="/post/create"
       variant="soft"
@@ -12,7 +27,6 @@ const { data, error } = useFetch('/api/v1/post')
     />
   </div>
   <SectionFlicking
-    v-if="!error"
-    :list="data"
+    :list="postList"
   />
 </template>
