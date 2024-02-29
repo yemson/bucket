@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import type { Content } from '@tiptap/core'
-
 const route = useRoute()
-const { data } = useFetch(`/api/v1/post/${route.params.postNo}`)
+const content = ref()
 
-const content: Content = computed(() => {
-  return data.value?.data.post_json
+async function getContent() {
+  const data = await $fetch(`/api/v1/post/${route.params.postNo}`, {
+    method: 'GET',
+  })
+
+  content.value = data?.data.post_json
+}
+
+onMounted(() => {
+  getContent()
 })
 </script>
 
 <template>
   <ClientOnly>
     <Tiptap
+      v-if="content"
       v-model="content"
       :read-only="true"
     />
