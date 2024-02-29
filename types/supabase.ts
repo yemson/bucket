@@ -9,33 +9,27 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      todos: {
+      posts: {
         Row: {
-          content: string | null
           created_at: string
           id: number
-          is_complete: boolean | null
-          memo: string | null
-          uid: string | null
-          updated_at: string
+          post_json: Json | null
+          updated_at: string | null
+          user_id: string | null
         }
         Insert: {
-          content?: string | null
           created_at?: string
           id?: number
-          is_complete?: boolean | null
-          memo?: string | null
-          uid?: string | null
-          updated_at?: string
+          post_json?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          content?: string | null
           created_at?: string
           id?: number
-          is_complete?: boolean | null
-          memo?: string | null
-          uid?: string | null
-          updated_at?: string
+          post_json?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

@@ -3,9 +3,17 @@ import Flicking from '@egjs/vue3-flicking'
 import '@egjs/vue3-flicking/dist/flicking.css'
 import { AutoPlay, Perspective } from '@egjs/flicking-plugins'
 
-const plugin = ref([new Perspective({ rotate: 0.3 }), new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: true })])
+const props = defineProps({
+  list: {
+    type: Object,
+    required: true,
+  },
+})
+
+const plugin = ref([new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: true })])
 const options = ref({
   renderOnlyVisible: true,
+  circular: true,
 })
 </script>
 
@@ -18,11 +26,16 @@ const options = ref({
     :plugins="plugin"
   >
     <div
-      v-for="i in 100"
-      :key="i"
+      v-for="(l, index) in props.list.data"
+      :key="index"
     >
-      <div class="w-64 h-96 bg-gray-100 rounded-md border scale-90 hover:scale-100 transition">
-        asdfasd
+      <div
+        class="w-64 h-96 bg-gray-100 rounded-md border scale-90 hover:scale-100 transition cursor-pointer p-3"
+        @click="navigateTo(`/post/${l.id}`)"
+      >
+        <div class="text-lg">
+          {{ l.title }}
+        </div>
       </div>
     </div>
   </Flicking>

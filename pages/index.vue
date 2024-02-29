@@ -1,5 +1,5 @@
 <script setup>
-
+const { data, error } = useFetch('/api/v1/post')
 </script>
 
 <template>
@@ -11,5 +11,8 @@
       icon="i-heroicons-plus"
     />
   </div>
-  <SectionFlicking />
+  <SectionFlicking
+    v-if="!error"
+    :list="data"
+  />
 </template>
