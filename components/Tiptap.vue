@@ -11,7 +11,7 @@ const editor = useEditor({
   ],
   content: modelValue.value,
   onUpdate({ editor }) {
-    modelValue.value = editor.getHTML()
+    modelValue.value = editor.getJSON()
   },
   editorProps: {
     attributes: {
@@ -22,5 +22,8 @@ const editor = useEditor({
 </script>
 
 <template>
-  <EditorContent :editor="editor" />
+  <EditorContent
+    :editor="editor"
+    class="border border-gray-200 dark:border-gray-100/30 rounded-md"
+  />
 </template>

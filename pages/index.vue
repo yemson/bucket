@@ -3,7 +3,6 @@
 </script>
 
 <template>
-  <!-- <SectionFlicking /> -->
   <div class="flex justify-end">
     <UButton
       to="/post/create"
@@ -12,4 +11,5 @@
       icon="i-heroicons-plus"
     />
   </div>
+  <SectionFlicking />
 </template>

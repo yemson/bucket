@@ -3,7 +3,7 @@ import Flicking from '@egjs/vue3-flicking'
 import '@egjs/vue3-flicking/dist/flicking.css'
 import { AutoPlay, Perspective } from '@egjs/flicking-plugins'
 
-const plugin = ref([new Perspective({ rotate: 0.3 }), new AutoPlay({ duration: 1000, direction: 'NEXT', stopOnHover: true })])
+const plugin = ref([new Perspective({ rotate: 0.3 }), new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: true })])
 const options = ref({
   renderOnlyVisible: true,
 })
