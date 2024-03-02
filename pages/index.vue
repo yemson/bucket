@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const postList = ref([])
+import type { Post } from '~/types/common'
 
-async function getPostList() {
+const recentPosts = ref<Post[]>([])
+async function getRecentPosts() {
   try {
-    postList.value = await $fetch(`/api/v1/post/recent`, {
+    const result = await $fetch(`/api/v1/post/recent`, {
       method: 'GET',
     })
+
+    recentPosts.value = result.data as Post[]
   }
   catch (error) {
     console.error(error)
@@ -13,7 +16,7 @@ async function getPostList() {
 }
 
 onMounted(() => {
-  getPostList()
+  getRecentPosts()
 })
 </script>
 
@@ -22,7 +25,6 @@ onMounted(() => {
     새로운 노트
   </h1>
   <SectionFlicking
-    :list="postList"
+    :posts="recentPosts"
   />
-  <div>asdf</div>
 </template>
