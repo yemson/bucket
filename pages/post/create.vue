@@ -52,19 +52,29 @@ async function createPost() {
     >
       노트잇!
     </NuxtLink>
-    <ClientOnly>
+    <div class="flex gap-2">
+      <ClientOnly>
+        <UButton
+          :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+          color="gray"
+          variant="ghost"
+          aria-label="테마 변경"
+          @click="isDark = !isDark"
+        />
+        <template #fallback>
+          <USkeleton class="w-8 h-8" />
+        </template>
+      </ClientOnly>
       <UButton
-        :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-        color="gray"
-        variant="ghost"
-        size="xl"
-        aria-label="Theme"
-        @click="isDark = !isDark"
+        label="출간"
+        icon="i-heroicons-document-text-20-solid"
+        variant="soft"
+        aria-label="출간하기"
+        :disabled="!content || !title"
+        :loading="isCreatePostLoading"
+        @click="createPost"
       />
-      <template #fallback>
-        <USkeleton class="w-[44px] h-[44px]" />
-      </template>
-    </ClientOnly>
+    </div>
   </header>
 
   <ClientOnly>
@@ -83,15 +93,7 @@ async function createPost() {
       />
       <Tiptap
         v-model="content"
-        class="h-[calc(100dvh-220px)] mb-3 overflow-auto"
-      />
-    </div>
-    <div class="flex justify-end mt-3">
-      <UButton
-        label="작성하기"
-        :disabled="!content || !title"
-        :loading="isCreatePostLoading"
-        @click="createPost"
+        class="h-[calc(100dvh-160px)] mb-3 overflow-auto"
       />
     </div>
     <template #fallback>

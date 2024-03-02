@@ -28,9 +28,10 @@ const options = ref({
       <div
         v-for="(l, index) in props.list.data"
         :key="index"
+        class="mx-2"
       >
         <div
-          class="w-64 h-96 bg-gray-100 rounded-md border cursor-pointer p-3"
+          class="w-64 h-64 bg-gray-100 rounded-md cursor-pointer p-3 dark:bg-gray-800"
           @click="navigateTo(`/post/${l.id}`)"
         >
           <div class="text-lg">
@@ -40,7 +41,13 @@ const options = ref({
       </div>
     </Flicking>
     <template #fallback>
-      <USkeleton class="w-full h-96" />
+      <USkeleton class="w-full h-64" />
     </template>
   </ClientOnly>
 </template>
+
+<style scoped>
+.flicking-viewport {
+  height: 16rem;
+}
+</style>

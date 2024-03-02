@@ -27,7 +27,7 @@ const editor = useEditor({
   },
   editorProps: {
     attributes: {
-      class: 'prose max-w-none dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl prose-base mx-5 mt-3 mb-5 focus:outline-none',
+      class: 'prose max-w-none dark:prose-invert prose-sm sm:prose-base lg:prose-lg prose-base focus:outline-none',
     },
   },
 })
@@ -36,6 +36,7 @@ const editor = useEditor({
 <template>
   <EditorContent
     :editor="editor"
+    :class="[!props.readOnly && 'm-5']"
   />
 </template>
 

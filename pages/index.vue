@@ -3,7 +3,7 @@ const postList = ref([])
 
 async function getPostList() {
   try {
-    postList.value = await $fetch(`/api/v1/post`, {
+    postList.value = await $fetch(`/api/v1/post/recent`, {
       method: 'GET',
     })
   }
@@ -18,15 +18,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-end mb-3">
-    <UButton
-      to="/post/create"
-      variant="soft"
-      label="글쓰기"
-      icon="i-heroicons-plus"
-    />
-  </div>
+  <h1 class="text-xl font-semibold my-4">
+    새로운 노트
+  </h1>
   <SectionFlicking
     :list="postList"
   />
+  <div>asdf</div>
 </template>

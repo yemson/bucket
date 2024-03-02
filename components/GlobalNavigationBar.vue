@@ -13,8 +13,14 @@ const isDark = computed({
 
 const items = [
   [{
+    label: '글쓰기',
+    icon: 'i-heroicons-pencil',
+    click: () => {
+      navigateTo('/post/create')
+    },
+  }, {
     label: '로그아웃',
-    icon: 'i-heroicons-arrow-left-start-on-rectangle',
+    icon: 'i-heroicons-arrow-right-start-on-rectangle',
     click: () => {
       signOut()
     },
@@ -39,7 +45,7 @@ async function signOut() {
     >
       노트잇!
     </NuxtLink>
-    <div>
+    <div class="flex">
       <ClientOnly>
         <UButton
           :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
@@ -50,7 +56,7 @@ async function signOut() {
           @click="isDark = !isDark"
         />
         <template #fallback>
-          <USkeleton class="w-[44px] h-[44px]" />
+          <USkeleton class="w-11 h-11" />
         </template>
       </ClientOnly>
       <UDropdown
@@ -58,7 +64,7 @@ async function signOut() {
         :popper="{ placement: 'bottom-start' }"
       >
         <UButton
-          icon="i-heroicons-bars-3"
+          icon="i-heroicons-user-circle-20-solid"
           size="xl"
           color="gray"
           square

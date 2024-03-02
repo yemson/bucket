@@ -6,13 +6,16 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await client
     .from('posts')
-    .select('id, title')
+    .select('*')
+    .select('id, title, profiles (email, nickname)')
     .order('created_at', { ascending: false })
     .limit(10)
 
+  // console.log(error)
   if (error) {
     throw createError({
       statusCode: 500,
+      statusMessage: error.message,
     })
   }
   else {
