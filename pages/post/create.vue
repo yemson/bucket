@@ -62,13 +62,7 @@ async function createPost() {
         @click="isDark = !isDark"
       />
       <template #fallback>
-        <UButton
-          :loading="true"
-          color="gray"
-          variant="ghost"
-          size="xl"
-          aria-label="Theme"
-        />
+        <USkeleton class="w-[44px] h-[44px]" />
       </template>
     </ClientOnly>
   </header>
