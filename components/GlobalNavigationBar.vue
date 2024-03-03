@@ -52,7 +52,7 @@ async function signOut() {
           color="gray"
           variant="ghost"
           size="xl"
-          aria-label="Theme"
+          aria-label="테마 변경"
           @click="isDark = !isDark"
         />
         <template #fallback>
@@ -69,6 +69,7 @@ async function signOut() {
           color="gray"
           square
           variant="ghost"
+          aria-label="사용자 메뉴"
         />
       </UDropdown>
     </div>
