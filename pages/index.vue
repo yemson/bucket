@@ -2,8 +2,11 @@
 import type { Post } from '~/types/common'
 
 const recentPosts = ref<Post[]>([])
+const isGetRecentPostsLoading = ref(false)
+
 async function getRecentPosts() {
   try {
+    isGetRecentPostsLoading.value = true
     const result = await $fetch(`/api/v1/post/recent`, {
       method: 'GET',
     })
@@ -13,6 +16,9 @@ async function getRecentPosts() {
   catch (error) {
     console.error(error)
   }
+  finally {
+    isGetRecentPostsLoading.value = false
+  }
 }
 
 onMounted(() => {
@@ -21,10 +27,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1 class="text-xl font-semibold my-4">
-    새로운 노트
-  </h1>
   <SectionFlicking
+    v-model:loading="isGetRecentPostsLoading"
+    title="새로운 노트"
     :posts="recentPosts"
   />
 </template>

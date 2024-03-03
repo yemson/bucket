@@ -29,7 +29,7 @@ onMounted(() => {
 
 <template>
   <div v-if="post">
-    <div class="flex justify-between mt-2">
+    <div class="flex justify-between mt-3">
       <button
         class=" flex gap-1 text-primary-500 hover:underline hover:underline-offset-4 hover:decoration-1"
         @click="$router.back"
@@ -47,14 +47,14 @@ onMounted(() => {
           alt="Profile Image"
           size="2xs"
         />
-        <p class="text-sm text-gray-500 self-center">
+        <p class="text-sm text-gray-500 dark:text-gray-300 self-center">
           {{ post.profiles.nickname }}
         </p>
         <div class="text-primary-500 mx-1.5">
           /
         </div>
         <div
-          class="self-center text-gray-400 text-sm"
+          class="self-center text-gray-400 dark:text-gray-500 text-sm"
         >
           {{ dayjs(post.created_at).format('YYYY-MM-DD') }}
         </div>
