@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/member/login',
       callback: '/confirm',
-      exclude: [],
+      exclude: ['/member/register'],
       cookieRedirect: false,
     },
   },
