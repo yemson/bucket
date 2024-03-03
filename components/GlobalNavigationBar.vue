@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 const colorMode = useColorMode()
 
 const isDark = computed({
@@ -13,6 +14,11 @@ const isDark = computed({
 
 const items = [
   [{
+    label: user.value?.user_metadata.nickname,
+    avatar: {
+      src: `https://source.boringavatars.com/beam/120/${user.value?.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`,
+    },
+  }, {
     label: '글쓰기',
     icon: 'i-heroicons-pencil',
     click: () => {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Post } from '~/types/common'
 
+const user = useSupabaseUser()
+
 const dayjs = useDayjs()
 const route = useRoute()
 const post = ref<Post>()
@@ -30,35 +32,33 @@ onMounted(() => {
 <template>
   <div v-if="post">
     <div class="flex justify-between mt-3">
-      <button
-        class=" flex gap-1 text-primary-500 hover:underline hover:underline-offset-4 hover:decoration-1"
-        @click="$router.back"
-      >
-        <UIcon
-          class="self-center"
-          name="i-heroicons-arrow-left"
-        />
-        <span>뒤로가기</span>
-      </button>
-      <div class="flex">
+      <div class="flex self-center">
         <UAvatar
-          class="self-center mr-1.5"
+          class="mr-1.5"
           :src="`https://source.boringavatars.com/beam/120/${post.profiles.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
           alt="Profile Image"
           size="2xs"
         />
-        <p class="text-sm text-gray-500 dark:text-gray-300 self-center">
+        <p class="text-sm text-gray-500 dark:text-gray-300">
           {{ post.profiles.nickname }}
         </p>
-        <div class="text-primary-500 mx-1.5">
+        <div class="text-primary-500 mx-1.5 text-sm">
           /
         </div>
         <div
-          class="self-center text-gray-400 dark:text-gray-500 text-sm"
+          class="text-gray-400 dark:text-gray-500 text-sm "
         >
           {{ dayjs(post.created_at).format('YYYY-MM-DD') }}
         </div>
       </div>
+      <UButton
+        v-if="user?.id === post.user_id"
+        class="self-center"
+        variant="ghost"
+        icon="i-heroicons-cog-6-tooth"
+        aria-label="글 수정"
+        @click="navigateTo(`/post/${post.id}/edit`)"
+      />
     </div>
     <div
       class="mt-4"
@@ -77,5 +77,33 @@ onMounted(() => {
       v-model="content"
       :read-only="true"
     />
+    <template v-else>
+      <USkeleton
+        class="w-52 h-5 mt-3"
+      />
+      <USkeleton
+        class="w-80 h-8 mt-4"
+      />
+      <UDivider
+        class="my-4"
+      />
+      <USkeleton
+        class="w-full h-72"
+      />
+    </template>
+    <template #fallback>
+      <USkeleton
+        class="w-52 h-5 mt-3"
+      />
+      <USkeleton
+        class="w-80 h-8 mt-4"
+      />
+      <UDivider
+        class="my-4"
+      />
+      <USkeleton
+        class="w-full h-72"
+      />
+    </template>
   </ClientOnly>
 </template>
