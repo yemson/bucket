@@ -4,18 +4,17 @@ import type { Database } from '~/types/supabase'
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
 
+  const { postNo } = getRouterParams(event)
+
   const { data, error } = await client
     .from('posts')
-    .select('*')
-    .eq('is_private', false)
-    .select('id, title, profiles (email, nickname)')
-    .order('created_at', { ascending: false })
-    .limit(10)
+    .select('user_id, is_private')
+    .eq('id', postNo)
+    .single()
 
   if (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: error.message,
     })
   }
   else {

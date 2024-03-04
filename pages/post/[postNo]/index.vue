@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { Post } from '~/types/common'
 
+definePageMeta({
+  middleware: 'check-private',
+})
+
 const user = useSupabaseUser()
 
 const dayjs = useDayjs()

@@ -8,6 +8,7 @@ const colorMode = useColorMode()
 
 const content = ref('')
 const title = ref('')
+const isPrivate = ref(false)
 const isCreatePostLoading = ref(false)
 
 const isDark = computed({
@@ -28,6 +29,7 @@ async function createPost() {
     const postObject = {
       title: title.value,
       post_json: content.value,
+      is_private: !isPrivate.value,
     }
 
     await $fetch('/api/v1/post', {
@@ -46,10 +48,10 @@ async function createPost() {
 </script>
 
 <template>
-  <header class="py-2 font-bold flex justify-between">
+  <header class="py-2 flex justify-between">
     <NuxtLink
       to="/"
-      class="self-center"
+      class="self-center font-bold"
     >
       노트잇!
     </NuxtLink>
@@ -66,15 +68,36 @@ async function createPost() {
           <USkeleton class="w-8 h-8" />
         </template>
       </ClientOnly>
-      <UButton
-        label="출간"
-        icon="i-heroicons-document-text-20-solid"
-        variant="soft"
-        aria-label="출간하기"
-        :disabled="!content || !title"
-        :loading="isCreatePostLoading"
-        @click="createPost"
-      />
+      <UButtonGroup
+        size="sm"
+        orientation="horizontal"
+      >
+        <UButton
+          label="출간"
+          icon="i-heroicons-document-text-20-solid"
+          variant="soft"
+          aria-label="출간하기"
+          :disabled="!content || !title"
+          :loading="isCreatePostLoading"
+          @click="createPost"
+        />
+        <UPopover>
+          <UButton
+            icon="i-heroicons-chevron-down-20-solid"
+            variant="soft"
+            aria-label="더보기"
+          />
+          <template #panel>
+            <div class="flex gap-4 p-4">
+              <p>공개 여부</p>
+              <UToggle
+                v-model="isPrivate"
+                class="self-center"
+              />
+            </div>
+          </template>
+        </UPopover>
+      </UButtonGroup>
     </div>
   </header>
 

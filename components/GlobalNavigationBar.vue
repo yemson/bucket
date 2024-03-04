@@ -89,13 +89,25 @@ onMounted(() => {
         :popper="{ placement: 'bottom-start' }"
       >
         <UButton
-          icon="i-heroicons-user-circle-20-solid"
           size="xl"
           color="gray"
           square
           variant="ghost"
           aria-label="사용자 메뉴"
-        />
+        >
+          <template #leading>
+            <UAvatar
+              v-if="user"
+              :src="`https://source.boringavatars.com/beam/120/${user?.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
+              size="xs"
+            />
+            <UIcon
+              v-else
+              name="i-heroicons-user-circle-20-solid"
+              class="w-6 h-6"
+            />
+          </template>
+        </UButton>
       </UDropdown>
     </div>
   </header>

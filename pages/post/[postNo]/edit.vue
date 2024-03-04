@@ -3,6 +3,7 @@ import type { Post } from '~/types/common'
 
 definePageMeta({
   layout: false,
+  middleware: 'check-edit',
 })
 
 const colorMode = useColorMode()
