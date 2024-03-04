@@ -6,6 +6,21 @@ const user = useSupabaseUser()
 const dayjs = useDayjs()
 const route = useRoute()
 const post = ref<Post>()
+const settingItems = [
+  [{
+    label: '수정',
+    click: () => {
+      navigateTo(`/post/${post.value?.id}/edit`)
+    },
+    icon: 'i-heroicons-pencil',
+  }, {
+    label: '삭제',
+    click: () => {
+      navigateTo(`/post/${post.value?.id}/edit`)
+    },
+    icon: 'i-heroicons-trash',
+  }],
+]
 
 async function getPost() {
   try {
@@ -51,14 +66,17 @@ onMounted(() => {
           {{ dayjs(post.created_at).format('YYYY-MM-DD') }}
         </div>
       </div>
-      <UButton
+      <UDropdown
         v-if="user?.id === post.user_id"
+        :items="settingItems"
         class="self-center"
-        variant="ghost"
-        icon="i-heroicons-cog-6-tooth"
-        aria-label="글 수정"
-        @click="navigateTo(`/post/${post.id}/edit`)"
-      />
+      >
+        <UButton
+          variant="ghost"
+          icon="i-heroicons-cog-6-tooth"
+          aria-label="글 설정"
+        />
+      </UDropdown>
     </div>
     <div
       class="mt-4"
