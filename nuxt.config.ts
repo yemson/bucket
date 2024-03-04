@@ -29,11 +29,6 @@ export default defineNuxtConfig({
     '@/assets/css/main.css',
   ],
   supabase: {
-    redirectOptions: {
-      login: '/member/login',
-      callback: '/confirm',
-      exclude: ['/member/register'],
-      cookieRedirect: false,
-    },
+    redirect: false,
   },
 })

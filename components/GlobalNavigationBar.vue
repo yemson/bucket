@@ -39,7 +39,7 @@ async function signOut() {
   if (error)
     console.error(error)
   else
-    navigateTo('/login')
+    navigateTo('/')
 }
 </script>
 
