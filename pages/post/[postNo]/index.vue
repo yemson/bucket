@@ -6,21 +6,37 @@ const user = useSupabaseUser()
 const dayjs = useDayjs()
 const route = useRoute()
 const post = ref<Post>()
+const isEditModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
 const settingItems = [
   [{
     label: '수정',
     click: () => {
-      navigateTo(`/post/${post.value?.id}/edit`)
+      isEditModalOpen.value = true
     },
     icon: 'i-heroicons-pencil',
   }, {
     label: '삭제',
     click: () => {
-      navigateTo(`/post/${post.value?.id}/edit`)
+      isDeleteModalOpen.value = true
     },
     icon: 'i-heroicons-trash',
   }],
 ]
+
+async function deletePost() {
+  try {
+    await $fetch(`/api/v1/post/${route.params.postNo}`, {
+      // @ts-expect-error: DELETE method
+      method: 'DELETE',
+    })
+
+    navigateTo('/')
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
 
 async function getPost() {
   try {
@@ -88,6 +104,18 @@ onMounted(() => {
         class="my-4"
       />
     </div>
+
+    <CommonModal
+      v-model="isEditModalOpen"
+      content="해당 노트를 수정하시겠습니까?"
+      @confirm="navigateTo(`/post/${post.id}/edit`)"
+    />
+
+    <CommonModal
+      v-model="isDeleteModalOpen"
+      content="해당 노트를 삭제하시겠습니까?"
+      @confirm="deletePost"
+    />
   </div>
   <ClientOnly>
     <Tiptap
