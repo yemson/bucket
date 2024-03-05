@@ -18,7 +18,5 @@ export default defineEventHandler(async (event) => {
       statusMessage: error.message,
     })
   }
-  else {
-    return data
-  }
+  else { return data }
 })

@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import type { SimplePost } from '~/types/common'
+
 const user = useSupabaseUser()
 
-const { data: posts, pending } = useFetch('/api/v1/post/recent')
+const { data: recentPosts, pending: recentPostsPending } = await useFetch('/api/v1/dashboard/recentPosts')
+const { data: myPosts, pending: myPostsPending } = await useFetch('/api/v1/dashboard/myPosts')
 </script>
 
 <template>
@@ -49,8 +52,15 @@ const { data: posts, pending } = useFetch('/api/v1/post/recent')
     </div>
   </div>
   <SectionFlicking
-    v-model:loading="pending"
+    v-model:loading="recentPostsPending"
     title="새로운 노트"
-    :posts="posts"
+    :posts="recentPosts as SimplePost[]"
+  />
+  <SectionFlicking
+    v-if="user"
+    v-model:loading="myPostsPending"
+    visible-public-icon
+    title="나의 노트"
+    :posts="myPosts as SimplePost[]"
   />
 </template>

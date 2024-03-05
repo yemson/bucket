@@ -48,8 +48,10 @@ async function editPost() {
       is_public: post.value.is_public,
     }
 
-    await $fetch(`/api/v1/post/${route.params.postNo}`, {
-      // @ts-expect-error: patch method 있는데 왜 자꾸 없다고 함?
+    await $fetch(`/api/v1/post`, {
+      query: {
+        postNo: route.params.postNo,
+      },
       method: 'PATCH',
       body: {
         title: postObject.title,

@@ -2,23 +2,19 @@
 import Flicking from '@egjs/vue3-flicking'
 import '@egjs/vue3-flicking/dist/flicking.css'
 import { AutoPlay } from '@egjs/flicking-plugins'
-
-interface Post {
-  id: number
-  title: string
-  profiles: {
-    email: string
-    nickname: string
-  }
-}
+import type { SimplePost } from '~/types/common'
 
 const props = defineProps({
   posts: {
-    type: Array as PropType<Post[]>,
+    type: Array as PropType<SimplePost[]>,
     required: true,
   },
   title: {
     type: String,
+  },
+  visiblePublicIcon: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -57,14 +53,21 @@ const options = ref({
             <p class="text-lg">
               {{ post.title }}
             </p>
-            <div class="flex gap-2">
-              <UAvatar
-                :src="`https://source.boringavatars.com/beam/120/${post.profiles?.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
-                alt="Profile Image"
+            <div class="flex justify-between">
+              <div class="flex gap-2">
+                <UAvatar
+                  :src="`https://source.boringavatars.com/beam/120/${post.profiles?.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
+                  alt="Profile Image"
+                />
+                <p class="text-sm text-gray-500 dark:text-gray-300 self-center">
+                  {{ post.profiles?.nickname }}
+                </p>
+              </div>
+              <UIcon
+                v-if="props.visiblePublicIcon"
+                class="self-center w-5 h-5 text-gray-500 dark:text-gray-400"
+                :name="post.is_public ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'"
               />
-              <p class="text-sm text-gray-500 dark:text-gray-300 self-center">
-                {{ post.profiles?.nickname }}
-              </p>
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ const editor = useEditor({
   extensions: [
     StarterKit,
     Placeholder.configure({
-      placeholder: '당신만의 글을 써보세요...',
+      placeholder: '당신의 이야기를 들려주세요!',
     }),
   ],
   content: modelValue.value,

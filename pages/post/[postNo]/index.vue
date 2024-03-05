@@ -77,22 +77,35 @@ useHead(() => {
           /
         </div>
         <div
-          class="text-gray-400 dark:text-gray-500 text-sm "
+          class="text-gray-400 dark:text-gray-500 text-sm"
         >
           {{ dayjs(post?.created_at).format('YYYY-MM-DD') }}
         </div>
       </div>
-      <UDropdown
+      <div
         v-if="user?.id === post?.user_id"
-        :items="settingItems"
-        class="self-center"
+        class="flex gap-1"
       >
-        <UButton
-          variant="ghost"
-          icon="i-heroicons-cog-6-tooth"
-          aria-label="글 설정"
-        />
-      </UDropdown>
+        <UTooltip
+          :text="post?.is_public ? '공개' : '비공개'"
+          :popper="{ arrow: true }"
+        >
+          <UIcon
+            class="self-center w-5 h-5 text-gray-500 dark:text-gray-400"
+            :name="post?.is_public ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'"
+          />
+        </UTooltip>
+        <UDropdown
+          :items="settingItems"
+          class="self-center"
+        >
+          <UButton
+            variant="ghost"
+            icon="i-heroicons-cog-6-tooth"
+            aria-label="글 설정"
+          />
+        </UDropdown>
+      </div>
     </div>
     <div
       class="mt-4"
