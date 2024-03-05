@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Post } from '~/types/common'
+import type { Content } from '@tiptap/core'
 
 definePageMeta({
   middleware: 'check-public',
@@ -9,7 +9,6 @@ const user = useSupabaseUser()
 
 const dayjs = useDayjs()
 const route = useRoute()
-const post = ref<Post>()
 const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 const settingItems = [
@@ -28,10 +27,18 @@ const settingItems = [
   }],
 ]
 
+const { data: post, pending } = useFetch(`/api/v1/post`, {
+  query: {
+    postNo: route.params.postNo,
+  },
+})
+
 async function deletePost() {
   try {
-    await $fetch(`/api/v1/post/${route.params.postNo}`, {
-      // @ts-expect-error: DELETE method
+    await $fetch(`/api/v1/post`, {
+      query: {
+        postNo: route.params.postNo,
+      },
       method: 'DELETE',
     })
 
@@ -42,40 +49,29 @@ async function deletePost() {
   }
 }
 
-async function getPost() {
-  try {
-    const result = await $fetch(`/api/v1/post/${route.params.postNo}`, {
-      method: 'GET',
-    })
-
-    post.value = result.data as Post
-  }
-  catch (error) {
-    console.error(error)
-  }
-}
-
-const content = computed(() => {
+const content: Content = computed(() => {
   return post.value?.post_json
 })
 
-onMounted(() => {
-  getPost()
+useHead(() => {
+  return {
+    title: post.value?.title,
+  }
 })
 </script>
 
 <template>
-  <div v-if="post">
+  <template v-if="!pending">
     <div class="flex justify-between mt-3">
       <div class="flex self-center">
         <UAvatar
           class="mr-1.5"
-          :src="`https://source.boringavatars.com/beam/120/${post.profiles.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
+          :src="`https://source.boringavatars.com/beam/120/${post?.profiles?.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
           alt="Profile Image"
           size="2xs"
         />
         <p class="text-sm text-gray-500 dark:text-gray-300">
-          {{ post.profiles.nickname }}
+          {{ post?.profiles?.nickname }}
         </p>
         <div class="text-primary-500 mx-1.5 text-sm">
           /
@@ -83,11 +79,11 @@ onMounted(() => {
         <div
           class="text-gray-400 dark:text-gray-500 text-sm "
         >
-          {{ dayjs(post.created_at).format('YYYY-MM-DD') }}
+          {{ dayjs(post?.created_at).format('YYYY-MM-DD') }}
         </div>
       </div>
       <UDropdown
-        v-if="user?.id === post.user_id"
+        v-if="user?.id === post?.user_id"
         :items="settingItems"
         class="self-center"
       >
@@ -102,7 +98,7 @@ onMounted(() => {
       class="mt-4"
     >
       <h1 class="text-2xl font-semibold">
-        {{ post.title }}
+        {{ post?.title }}
       </h1>
       <UDivider
         class="my-4"
@@ -112,7 +108,7 @@ onMounted(() => {
     <CommonModal
       v-model="isEditModalOpen"
       content="해당 노트를 수정하시겠습니까?"
-      @confirm="navigateTo(`/post/${post.id}/edit`)"
+      @confirm="navigateTo(`/post/${post?.id}/edit`)"
     />
 
     <CommonModal
@@ -120,37 +116,29 @@ onMounted(() => {
       content="해당 노트를 삭제하시겠습니까?"
       @confirm="deletePost"
     />
-  </div>
+  </template>
+  <template v-else>
+    <USkeleton
+      class="w-52 h-6 mt-3"
+    />
+    <USkeleton
+      class="w-80 h-8 mt-4"
+    />
+    <UDivider
+      class="my-4"
+    />
+  </template>
   <ClientOnly>
     <Tiptap
-      v-if="content"
+      v-if="!pending"
       v-model="content"
       :read-only="true"
     />
-    <template v-else>
-      <USkeleton
-        class="w-52 h-5 mt-3"
-      />
-      <USkeleton
-        class="w-80 h-8 mt-4"
-      />
-      <UDivider
-        class="my-4"
-      />
-      <USkeleton
-        class="w-full h-72"
-      />
-    </template>
+    <USkeleton
+      v-else
+      class="w-full h-72"
+    />
     <template #fallback>
-      <USkeleton
-        class="w-52 h-5 mt-3"
-      />
-      <USkeleton
-        class="w-80 h-8 mt-4"
-      />
-      <UDivider
-        class="my-4"
-      />
       <USkeleton
         class="w-full h-72"
       />

@@ -19,8 +19,6 @@ export default defineEventHandler(async (event) => {
     })
   }
   else {
-    return {
-      data,
-    }
+    return data
   }
 })

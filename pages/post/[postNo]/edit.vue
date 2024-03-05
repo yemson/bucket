@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Post } from '~/types/common'
+import type { Content } from '@tiptap/core'
 
 definePageMeta({
   layout: false,
@@ -10,7 +10,6 @@ const colorMode = useColorMode()
 const route = useRoute()
 
 const isEditPostLoading = ref(false)
-const post = ref<Post>()
 
 const isDark = computed({
   get() {
@@ -21,18 +20,21 @@ const isDark = computed({
   },
 })
 
-async function getPost() {
-  try {
-    const result = await $fetch(`/api/v1/post/${route.params.postNo}`, {
-      method: 'GET',
-    })
+const { data: post } = useFetch(`/api/v1/post`, {
+  query: {
+    postNo: route.params.postNo,
+  },
+})
 
-    post.value = result.data as Post
-  }
-  catch (error) {
-    console.error(error)
-  }
-}
+const content: Content = computed({
+  get() {
+    return post.value?.post_json
+  },
+  set(value) {
+    if (post.value)
+      post.value.post_json = value as Content
+  },
+})
 
 async function editPost() {
   if (!post.value || !post.value.title || !post.value.post_json)
@@ -64,10 +66,6 @@ async function editPost() {
     navigateTo(`/post/${route.params.postNo}`)
   }
 }
-
-onMounted(() => {
-  getPost()
-})
 </script>
 
 <template>
@@ -155,7 +153,7 @@ onMounted(() => {
         class="px-5"
       />
       <Tiptap
-        v-model="post.post_json"
+        v-model="content"
         class="h-[calc(100dvh-160px)] mb-3 overflow-auto"
       />
     </div>

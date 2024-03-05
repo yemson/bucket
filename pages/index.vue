@@ -1,30 +1,7 @@
 <script setup lang="ts">
-import type { Post } from '~/types/common'
-
 const user = useSupabaseUser()
-const recentPosts = ref<Post[]>([])
-const isGetRecentPostsLoading = ref(false)
 
-async function getRecentPosts() {
-  try {
-    isGetRecentPostsLoading.value = true
-    const result = await $fetch(`/api/v1/post/recent`, {
-      method: 'GET',
-    })
-
-    recentPosts.value = result.data as Post[]
-  }
-  catch (error) {
-    console.error(error)
-  }
-  finally {
-    isGetRecentPostsLoading.value = false
-  }
-}
-
-onMounted(() => {
-  getRecentPosts()
-})
+const { data: posts, pending } = useFetch('/api/v1/post/recent')
 </script>
 
 <template>
@@ -72,8 +49,8 @@ onMounted(() => {
     </div>
   </div>
   <SectionFlicking
-    v-model:loading="isGetRecentPostsLoading"
+    v-model:loading="pending"
     title="새로운 노트"
-    :posts="recentPosts"
+    :posts="posts"
   />
 </template>

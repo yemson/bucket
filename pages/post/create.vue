@@ -22,8 +22,8 @@ const isDark = computed({
 
 const validateCreatePost = computed(() => {
   if (!content.value || !title.value)
-    return false
-  return true
+    return true
+  return false
 })
 
 async function createPost() {

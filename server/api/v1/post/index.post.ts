@@ -3,7 +3,6 @@ import type { Database } from '~/types/supabase'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
-
   const body = await readBody(event)
 
   const { error } = await client

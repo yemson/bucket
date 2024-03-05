@@ -1,20 +1,14 @@
-interface CheckData {
-  data: {
-    user_id: string
-    is_public: boolean
-  }
-}
-
 export default defineNuxtRouteMiddleware(async (_from) => {
   const user = useSupabaseUser()
-
-  const data = await $fetch<CheckData>(`/api/v1/post/${_from.params.postNo}/check`, {
-    method: 'GET',
+  const { data } = await useFetch('/api/v1/post/check', {
+    query: {
+      postNo: _from.params.postNo,
+    },
   })
 
-  if (!data)
+  if (!data.value)
     return abortNavigation()
 
-  if (user.value?.id !== data.data.user_id)
+  if (user.value?.id !== data.value.user_id)
     return abortNavigation()
 })

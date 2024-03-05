@@ -2,7 +2,15 @@
 import Flicking from '@egjs/vue3-flicking'
 import '@egjs/vue3-flicking/dist/flicking.css'
 import { AutoPlay } from '@egjs/flicking-plugins'
-import type { Post } from '~/types/common'
+
+interface Post {
+  id: number
+  title: string
+  profiles: {
+    email: string
+    nickname: string
+  }
+}
 
 const props = defineProps({
   posts: {
@@ -51,11 +59,11 @@ const options = ref({
             </p>
             <div class="flex gap-2">
               <UAvatar
-                :src="`https://source.boringavatars.com/beam/120/${post.profiles.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
+                :src="`https://source.boringavatars.com/beam/120/${post.profiles?.email}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`"
                 alt="Profile Image"
               />
               <p class="text-sm text-gray-500 dark:text-gray-300 self-center">
-                {{ post.profiles.nickname }}
+                {{ post.profiles?.nickname }}
               </p>
             </div>
           </div>
