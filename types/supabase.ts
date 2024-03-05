@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          is_public: boolean
           post_json: Json | null
           title: string | null
           updated_at: string | null
@@ -21,6 +22,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
+          is_public?: boolean
           post_json?: Json | null
           title?: string | null
           updated_at?: string | null
@@ -29,6 +31,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: number
+          is_public?: boolean
           post_json?: Json | null
           title?: string | null
           updated_at?: string | null
@@ -48,17 +51,17 @@ export type Database = {
         Row: {
           email: string
           id: string
-          nickname: string | null
+          nickname: string
         }
         Insert: {
           email: string
           id: string
-          nickname?: string | null
+          nickname: string
         }
         Update: {
           email?: string
           id?: string
-          nickname?: string | null
+          nickname?: string
         }
         Relationships: [
           {

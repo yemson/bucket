@@ -61,17 +61,15 @@ onMounted(() => {
         </h2>
       </div>
       <UButton
-        label="글쓰러가기"
+        :label="user ? '글쓰러가기' : '로그인하기'"
         color="primary"
         class="w-fit"
         icon="i-heroicons-arrow-right"
         trailing
         variant="soft"
+        @click="user ? navigateTo('/post/create') : navigateTo('/member/login')"
       />
     </div>
-    <!-- <div class="w-40 h-40 bg-gray-200">
-      asdf
-    </div> -->
   </div>
   <SectionFlicking
     v-model:loading="isGetRecentPostsLoading"

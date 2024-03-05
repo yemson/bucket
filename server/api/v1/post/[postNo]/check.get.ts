@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await client
     .from('posts')
-    .select('user_id, is_private')
+    .select('user_id, is_public')
     .eq('id', postNo)
     .single()
 

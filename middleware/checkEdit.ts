@@ -1,7 +1,7 @@
 interface CheckData {
   data: {
     user_id: string
-    is_private: boolean
+    is_public: boolean
   }
 }
 

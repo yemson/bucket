@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await client
     .from('posts')
     .select('*')
-    .eq('is_private', false)
+    .eq('is_public', true)
     .select('id, title, profiles (email, nickname)')
     .order('created_at', { ascending: false })
     .limit(10)

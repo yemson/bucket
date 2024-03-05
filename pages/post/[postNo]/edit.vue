@@ -43,6 +43,7 @@ async function editPost() {
     const postObject = {
       title: post.value.title,
       post_json: post.value.post_json,
+      is_public: post.value.is_public,
     }
 
     await $fetch(`/api/v1/post/${route.params.postNo}`, {
@@ -51,6 +52,7 @@ async function editPost() {
       body: {
         title: postObject.title,
         post_json: postObject.post_json,
+        is_public: postObject.is_public,
       },
     })
   }
@@ -69,10 +71,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <header class="py-2 font-bold flex justify-between">
+  <header class="py-2 flex justify-between">
     <NuxtLink
       to="/"
-      class="self-center"
+      class="self-center font-bold"
     >
       노트잇!
     </NuxtLink>
@@ -89,16 +91,49 @@ onMounted(() => {
           <USkeleton class="w-8 h-8" />
         </template>
       </ClientOnly>
-      <UButton
-        v-if="post"
-        label="출간"
-        icon="i-heroicons-document-text-20-solid"
-        variant="soft"
-        aria-label="출간하기"
-        :disabled="!post.title || !post.post_json"
-        :loading="isEditPostLoading"
-        @click="editPost"
-      />
+
+      <UButtonGroup
+        orientation="horizontal"
+      >
+        <UButton
+          label="출간"
+          icon="i-heroicons-document-text-20-solid"
+          variant="soft"
+          aria-label="출간하기"
+          :disabled="!post?.title || !post?.post_json"
+          :loading="isEditPostLoading"
+          @click="editPost"
+        />
+        <ClientOnly>
+          <UPopover>
+            <UButton
+              icon="i-heroicons-chevron-down-20-solid"
+              variant="soft"
+              aria-label="더보기"
+            />
+            <template #panel>
+              <div
+                v-if="post"
+                class="flex gap-4 p-4"
+              >
+                <p>공개 여부</p>
+                <UToggle
+                  v-model="post.is_public"
+                  class="self-center"
+                />
+              </div>
+            </template>
+          </UPopover>
+          <template #fallback>
+            <UButton
+              icon="i-heroicons-chevron-down-20-solid"
+              variant="soft"
+              aria-label="더보기"
+              disabled
+            />
+          </template>
+        </ClientOnly>
+      </UButtonGroup>
     </div>
   </header>
 

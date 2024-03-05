@@ -8,7 +8,7 @@ const colorMode = useColorMode()
 
 const content = ref('')
 const title = ref('')
-const isPrivate = ref(false)
+const isPublic = ref(true)
 const isCreatePostLoading = ref(false)
 
 const isDark = computed({
@@ -20,6 +20,12 @@ const isDark = computed({
   },
 })
 
+const validateCreatePost = computed(() => {
+  if (!content.value || !title.value)
+    return false
+  return true
+})
+
 async function createPost() {
   if (!content.value || !title.value)
     return
@@ -29,7 +35,7 @@ async function createPost() {
     const postObject = {
       title: title.value,
       post_json: content.value,
-      is_private: !isPrivate.value,
+      is_public: isPublic.value,
     }
 
     await $fetch('/api/v1/post', {
@@ -69,7 +75,6 @@ async function createPost() {
         </template>
       </ClientOnly>
       <UButtonGroup
-        size="sm"
         orientation="horizontal"
       >
         <UButton
@@ -77,26 +82,36 @@ async function createPost() {
           icon="i-heroicons-document-text-20-solid"
           variant="soft"
           aria-label="출간하기"
-          :disabled="!content || !title"
+          :disabled="validateCreatePost"
           :loading="isCreatePostLoading"
           @click="createPost"
         />
-        <UPopover>
-          <UButton
-            icon="i-heroicons-chevron-down-20-solid"
-            variant="soft"
-            aria-label="더보기"
-          />
-          <template #panel>
-            <div class="flex gap-4 p-4">
-              <p>공개 여부</p>
-              <UToggle
-                v-model="isPrivate"
-                class="self-center"
-              />
-            </div>
+        <ClientOnly>
+          <UPopover>
+            <UButton
+              icon="i-heroicons-chevron-down-20-solid"
+              variant="soft"
+              aria-label="더보기"
+            />
+            <template #panel>
+              <div class="flex gap-4 p-4">
+                <p>공개 여부</p>
+                <UToggle
+                  v-model="isPublic"
+                  class="self-center"
+                />
+              </div>
+            </template>
+          </UPopover>
+          <template #fallback>
+            <UButton
+              icon="i-heroicons-chevron-down-20-solid"
+              variant="soft"
+              aria-label="더보기"
+              disabled
+            />
           </template>
-        </UPopover>
+        </ClientOnly>
       </UButtonGroup>
     </div>
   </header>

@@ -2,7 +2,7 @@
 import type { Post } from '~/types/common'
 
 definePageMeta({
-  middleware: 'check-private',
+  middleware: 'check-public',
 })
 
 const user = useSupabaseUser()
