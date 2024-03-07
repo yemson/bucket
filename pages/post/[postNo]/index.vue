@@ -137,7 +137,7 @@ useHead(() => {
         </div>
         <div v-else>
           <UTooltip
-            :text="post?.likes.length"
+            :text="`${post?.likes.length}`"
             :popper="{ arrow: true }"
           >
             <UButton

@@ -13,8 +13,8 @@ useHead({
 
 const user = useSupabaseUser()
 
-const { data: recentPosts, pending: recentPostsPending } = await useFetch('/api/v1/dashboard/recentPosts')
-const { data: myPosts, pending: myPostsPending } = await useFetch('/api/v1/dashboard/myPosts')
+const { data: recentPosts, pending: recentPostsPending } = await useFetch('/api/v1/dashboard/post/recent')
+const { data: myPosts, pending: myPostsPending } = await useFetch('/api/v1/dashboard/post/my')
 </script>
 
 <template>

@@ -36,6 +36,7 @@ const options = ref({
   <template v-if="!model">
     <ClientOnly>
       <Flicking
+        v-if="props.posts.length > 0"
         :options="options"
         first-panel-size="256px"
         class="w-full rounded-md"
@@ -72,6 +73,12 @@ const options = ref({
           </div>
         </div>
       </Flicking>
+      <div
+        v-else
+        class="text-gray-500 dark:text-gray-400"
+      >
+        노트가 없습니다.
+      </div>
       <template #fallback>
         <USkeleton class="w-full h-64" />
       </template>
