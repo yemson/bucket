@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await client
     .from('likes')
     .select('*')
-    .eq('post_id', +query.postNo)
+    .eq('post_id', query.postNo)
     .eq('user_id', user.id)
 
   if (error) {
@@ -53,6 +53,8 @@ export default defineEventHandler(async (event) => {
         statusCode: 500,
       })
     }
-    setResponseStatus(event, 201)
+    else {
+      setResponseStatus(event, 201)
+    }
   }
 })

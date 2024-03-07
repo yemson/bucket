@@ -53,6 +53,34 @@ const content: Content = computed(() => {
   return post.value?.post_json
 })
 
+async function likePost() {
+  try {
+    if (post.value?.likes.includes(user.value?.id ?? '')) {
+      await $fetch(`/api/v1/post/like`, {
+        query: {
+          postNo: route.params.postNo,
+        },
+        method: 'DELETE',
+      })
+
+      post.value.likes = post.value.likes.filter((id: string) => id !== user.value?.id ?? '')
+    }
+    else {
+      await $fetch(`/api/v1/post/like`, {
+        query: {
+          postNo: route.params.postNo,
+        },
+        method: 'POST',
+      })
+
+      post.value?.likes.push(user.value?.id ?? '')
+    }
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
 useHead(() => {
   return {
     title: post.value?.title,
@@ -82,30 +110,44 @@ useHead(() => {
           {{ dayjs(post?.created_at).format('YYYY-MM-DD') }}
         </div>
       </div>
-      <div
-        v-if="user?.id === post?.user_id"
-        class="flex gap-1"
-      >
-        <UTooltip
-          :text="post?.is_public ? '공개' : '비공개'"
-          :popper="{ arrow: true }"
+      <template v-if="user">
+        <div
+          v-if="user?.id === post?.user_id"
+          class="flex gap-1"
         >
-          <UIcon
-            class="self-center w-5 h-5 text-gray-500 dark:text-gray-400"
-            :name="post?.is_public ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'"
-          />
-        </UTooltip>
-        <UDropdown
-          :items="settingItems"
-          class="self-center"
-        >
-          <UButton
-            variant="ghost"
-            icon="i-heroicons-cog-6-tooth"
-            aria-label="글 설정"
-          />
-        </UDropdown>
-      </div>
+          <UTooltip
+            :text="post?.is_public ? '공개' : '비공개'"
+            :popper="{ arrow: true }"
+          >
+            <UIcon
+              class="self-center w-5 h-5 text-gray-500 dark:text-gray-400"
+              :name="post?.is_public ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'"
+            />
+          </UTooltip>
+          <UDropdown
+            :items="settingItems"
+            class="self-center"
+          >
+            <UButton
+              variant="ghost"
+              icon="i-heroicons-cog-6-tooth"
+              aria-label="글 설정"
+            />
+          </UDropdown>
+        </div>
+        <div v-else>
+          <UTooltip
+            :text="post?.likes.length"
+            :popper="{ arrow: true }"
+          >
+            <UButton
+              :icon="post?.likes.includes(user?.id) ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'"
+              variant="ghost"
+              @click="likePost"
+            />
+          </UTooltip>
+        </div>
+      </template>
     </div>
     <div
       class="mt-4"

@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: error.message,
     })
   }
-
-  setResponseStatus(event, 204)
+  else {
+    setResponseStatus(event, 204)
+  }
 })

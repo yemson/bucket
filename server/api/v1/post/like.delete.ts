@@ -21,9 +21,10 @@ export default defineEventHandler(async (event) => {
   }
 
   const { error } = await client
-    .from('posts')
+    .from('likes')
     .delete()
-    .eq('id', query.postNo)
+    .eq('post_id', query.postNo)
+    .eq('user_id', user.id)
 
   if (error) {
     throw createError({
