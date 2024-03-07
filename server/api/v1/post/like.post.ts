@@ -20,10 +20,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { error } = await client
-    .from('posts')
-    .delete()
-    .eq('id', query.postNo)
+  const { data, error } = await client
+    .from('likes')
+    .select('*')
+    .eq('post_id', +query.postNo)
+    .eq('user_id', user.id)
 
   if (error) {
     throw createError({
@@ -32,5 +33,26 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  setResponseStatus(event, 204)
+  const likes = data.map(like => like.user_id)
+
+  if (likes.includes(user.id)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Already liked',
+    })
+  }
+  else {
+    const { error } = await client
+      .from('likes')
+      .insert({
+        post_id: +query.postNo,
+      })
+
+    if (error) {
+      throw createError({
+        statusCode: 500,
+      })
+    }
+    setResponseStatus(event, 201)
+  }
 })

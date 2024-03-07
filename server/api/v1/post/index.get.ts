@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await client
     .from('posts')
-    .select('*, profiles (email, nickname)')
+    .select('*, profiles (email, nickname), likes (user_id)')
     .eq('id', query.postNo)
     .single()
 
@@ -25,6 +25,9 @@ export default defineEventHandler(async (event) => {
     })
   }
   else {
-    return data
+    return {
+      ...data,
+      likes: data.likes.map(like => like.user_id),
+    }
   }
 })
