@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import type { SimplePost } from '~/types/common'
 
+useHead({
+  title: '노트잇',
+  meta: [
+    {
+      name: 'description',
+      content: '일상의 이야기를 기록하고 공유해보세요!',
+    },
+  ],
+})
+
 const user = useSupabaseUser()
 
 const { data: recentPosts, pending: recentPostsPending } = await useFetch('/api/v1/dashboard/recentPosts')
