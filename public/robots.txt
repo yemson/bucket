@@ -2,3 +2,4 @@ User-agent: *
 Disallow: /post/*/edit
 Disallow: /post/create
 Disallow: /post/done
+Disallow: /api
