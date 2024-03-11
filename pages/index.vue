@@ -19,7 +19,7 @@ const { data: myPosts, pending: myPostsPending } = await useFetch('/api/v1/dashb
 
 <template>
   <div
-    class="flex flex-wrap justify-between mt-6 mb-10"
+    class="flex justify-between mt-6 mb-10"
   >
     <div
       class="flex flex-col justify-between h-40 md:h-52"
@@ -62,15 +62,17 @@ const { data: myPosts, pending: myPostsPending } = await useFetch('/api/v1/dashb
     </div>
   </div>
   <SectionFlicking
-    v-model:loading="recentPostsPending"
-    title="새로운 노트"
-    :posts="recentPosts as SimplePost[]"
-  />
-  <SectionFlicking
     v-if="user"
     v-model:loading="myPostsPending"
     visible-public-icon
     title="나의 노트"
     :posts="myPosts as SimplePost[]"
+  />
+  <SectionFlicking
+    v-model:loading="recentPostsPending"
+    title="새로운 노트"
+    to="/post/list/recent"
+    class="mt-8"
+    :posts="recentPosts as SimplePost[]"
   />
 </template>

@@ -1,14 +1,14 @@
 export default defineNuxtRouteMiddleware(async (_from) => {
   const user = useSupabaseUser()
-  const { data } = await useFetch('/api/v1/post/check', {
+  const result = await $fetch('/api/v1/post/check', {
     query: {
       postNo: _from.params.postNo,
     },
   })
 
-  if (!data.value)
+  if (!result)
     return abortNavigation()
 
-  if (user.value?.id !== data.value.user_id && !data.value.is_public)
+  if (user.value?.id !== result.user_id && !result.is_public)
     return abortNavigation()
 })
