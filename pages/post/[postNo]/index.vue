@@ -155,6 +155,12 @@ useHead(() => {
       <h1 class="text-2xl font-semibold">
         {{ post?.title }}
       </h1>
+      <h2
+        v-if="post?.description"
+        class="text-gray-500 dark:text-gray-300"
+      >
+        {{ post?.description }}
+      </h2>
       <UDivider
         class="my-4"
       />

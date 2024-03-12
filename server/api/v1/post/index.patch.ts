@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
     .from('posts')
     .update({
       title: body.title,
+      description: body.description,
       post_json: body.post_json,
       is_public: body.is_public,
       updated_at: new Date().toISOString(),

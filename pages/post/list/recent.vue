@@ -1,33 +1,16 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const { data: recentList, pending } = useFetch(`/api/v1/post/list/recent?pageNo=${route.query.pageNo || 1}&pageSize=12`)
-
 const pageNo = ref(Number(route.query.pageNo) || 1)
 
-async function pageChange(page: number) {
-  try {
-    const result = await $fetch(`/api/v1/post/list/recent?pageNo=${page}&pageSize=12`)
-
-    if (result)
-      recentList.value = result
-
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-
-    navigateTo({ path: '/post/list/recent', query: { pageNo: page }, replace: true })
-  }
-  catch (error) {
-    console.error(error)
-  }
-}
-
-watch(pageNo, () => {
-  pageChange(pageNo.value)
+const { data: recentList } = useFetch(`/api/v1/post/list/recent`, {
+  query: { pageNo, pageSize: 12 },
+  watch: [pageNo],
 })
 </script>
 
 <template>
-  <section v-if="!pending">
+  <section>
     <h1
       class="text-xl font-semibold my-4"
     >
@@ -42,12 +25,17 @@ watch(pageNo, () => {
         :key="recent.id"
       >
         <div
-          class="flex flex-col justify-between h-72 bg-gray-100 rounded-md cursor-pointer p-4 dark:bg-gray-800"
+          class="flex flex-col justify-between h-52 bg-gray-100 rounded-md cursor-pointer p-4 dark:bg-gray-800"
           @click="navigateTo(`/post/${recent.id}`)"
         >
-          <p class="text-lg">
-            {{ recent.title }}
-          </p>
+          <div>
+            <p class="text-lg">
+              {{ recent.title }}
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-300">
+              {{ recent.description }}
+            </p>
+          </div>
           <div class="flex justify-between">
             <div class="flex gap-2">
               <UAvatar

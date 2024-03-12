@@ -64,12 +64,17 @@ const options = ref({
             class="mx-2"
           >
             <div
-              class="flex flex-col justify-between w-64 h-64 bg-gray-100 rounded-md cursor-pointer p-4 dark:bg-gray-800"
+              class="flex flex-col justify-between w-64 h-56 bg-gray-100 rounded-md cursor-pointer p-4 dark:bg-gray-800"
               @click="navigateTo(`/post/${post.id}`)"
             >
-              <p class="text-lg">
-                {{ post.title }}
-              </p>
+              <div>
+                <p class="text-lg">
+                  {{ post.title }}
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-300">
+                  {{ post.description }}
+                </p>
+              </div>
               <div class="flex justify-between">
                 <div class="flex gap-2">
                   <UAvatar
@@ -91,7 +96,7 @@ const options = ref({
         </Flicking>
         <div v-else-if="user">
           <div
-            class="flex flex-col justify-center w-64 h-64 bg-gray-100 rounded-md cursor-pointer p-4 dark:bg-gray-800"
+            class="flex flex-col justify-center w-64 h-56 bg-gray-100 rounded-md cursor-pointer p-4 dark:bg-gray-800"
             @click="navigateTo(`/post/create`)"
           >
             <UIcon
@@ -107,19 +112,19 @@ const options = ref({
           노트가 없습니다.
         </div>
         <template #fallback>
-          <USkeleton class="w-full h-64" />
+          <USkeleton class="w-full h-56" />
         </template>
       </ClientOnly>
     </template>
     <USkeleton
       v-else
-      class="w-full h-64"
+      class="w-full h-56"
     />
   </section>
 </template>
 
 <style scoped>
 .flicking-viewport {
-  height: 16rem;
+  height: 14rem;
 }
 </style>

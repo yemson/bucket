@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     .from('posts')
     .select('*')
     .eq('user_id', user.id)
-    .select('id, title, is_public, profiles (email, nickname)')
+    .select('id, title, description, is_public, profiles (email, nickname)')
     .order('created_at', { ascending: false })
     .limit(10)
 

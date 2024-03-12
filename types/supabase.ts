@@ -41,6 +41,7 @@ export interface Database {
       posts: {
         Row: {
           created_at: string
+          description: string | null
           id: number
           is_public: boolean
           post_json: Json | null
@@ -50,6 +51,7 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          description?: string | null
           id?: number
           is_public?: boolean
           post_json?: Json | null
@@ -59,6 +61,7 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          description?: string | null
           id?: number
           is_public?: boolean
           post_json?: Json | null
