@@ -28,7 +28,7 @@ const isDark = computed({
   },
 })
 
-const { data: post } = useFetch(`/api/v1/post`, {
+const { data: post } = await useFetch(`/api/v1/post`, {
   query: {
     postNo: route.params.postNo,
   },

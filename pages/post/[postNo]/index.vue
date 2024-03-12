@@ -27,7 +27,7 @@ const settingItems = [
   }],
 ]
 
-const { data: post, pending } = useFetch(`/api/v1/post`, {
+const { data: post, pending } = await useFetch(`/api/v1/post`, {
   query: {
     postNo: route.params.postNo,
   },
@@ -113,17 +113,31 @@ useHead(() => {
       <template v-if="user">
         <div
           v-if="user?.id === post?.user_id"
-          class="flex gap-1"
+          class="flex"
         >
+          <UTooltip
+            :text="`${post?.likes.length}`"
+            :popper="{ arrow: true }"
+          >
+            <UIcon
+              class="self-center w-5 h-5 text-gray-500 dark:text-gray-400"
+              name="i-heroicons-heart"
+            />
+          </UTooltip>
           <UTooltip
             :text="post?.is_public ? '공개' : '비공개'"
             :popper="{ arrow: true }"
+            class="ml-3"
           >
             <UIcon
               class="self-center w-5 h-5 text-gray-500 dark:text-gray-400"
               :name="post?.is_public ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'"
             />
           </UTooltip>
+          <UDivider
+            orientation="vertical"
+            class="ml-3 mr-1"
+          />
           <UDropdown
             :items="settingItems"
             class="self-center"
@@ -205,4 +219,16 @@ useHead(() => {
       />
     </template>
   </ClientOnly>
+  <UDivider class="my-4" />
+  <div class="mb-2 space-x-2">
+    <UBadge :ui="{ rounded: 'rounded-full' }">
+      일상
+    </UBadge>
+    <UBadge :ui="{ rounded: 'rounded-full' }">
+      공부
+    </UBadge>
+    <UBadge :ui="{ rounded: 'rounded-full' }">
+      자기개발
+    </UBadge>
+  </div>
 </template>

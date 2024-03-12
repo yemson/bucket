@@ -3,9 +3,20 @@ const route = useRoute()
 
 const pageNo = ref(Number(route.query.pageNo) || 1)
 
-const { data: recentList } = useFetch(`/api/v1/post/list/recent`, {
-  query: { pageNo, pageSize: 12 },
+const { data: recentList } = await useFetch(`/api/v1/post/list/recent`, {
+  query: {
+    pageNo,
+    pageSize: 12,
+  },
   watch: [pageNo],
+})
+
+watch(pageNo, () => {
+  navigateTo({
+    query: {
+      pageNo: pageNo.value,
+    },
+  })
 })
 </script>
 
