@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.4",
-    "@nuxt/ui": "^2.13.0",
-    "@nuxtjs/supabase": "^1.1.6",
+    "@nuxt/ui": "^2.14.2",
+    "@nuxtjs/supabase": "^1.1.7",
     "dayjs-nuxt": "^2.1.9",
     "eslint": "^8.56.0",
     "supabase": ">=1.8.1"
