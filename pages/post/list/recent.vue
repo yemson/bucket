@@ -3,21 +3,22 @@ const route = useRoute()
 
 const pageNo = ref(Number(route.query.pageNo) || 1)
 
-const { data: recentList } = await useFetch(`/api/v1/post/list/recent`, {
-  query: {
-    pageNo,
+const query = computed(() => {
+  return {
+    pageNo: pageNo.value,
     pageSize: 12,
+  }
+}, {
+  onTrigger: () => {
+    navigateTo({
+      query: {
+        pageNo: pageNo.value,
+      },
+    })
   },
-  watch: [pageNo],
 })
 
-watch(pageNo, () => {
-  navigateTo({
-    query: {
-      pageNo: pageNo.value,
-    },
-  })
-})
+const { data: recentList } = await useFetch(`/api/v1/post/list/recent`, { query })
 </script>
 
 <template>
