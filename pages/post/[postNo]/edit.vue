@@ -1,22 +1,43 @@
 <script setup lang="ts">
 import type { Content } from '@tiptap/core'
+import type { Pin } from '~/types/common'
 
 const colorMode = useColorMode()
 const route = useRoute()
 const isEditPostLoading = ref(false)
 const isPostSettingOpen = ref(false)
+const selectedPinList = ref<Pin[]>([])
+const pinList = [
+  {
+    label: '일상',
+    id: 'daily',
+  },
+  {
+    label: '공부',
+    id: 'study',
+  },
+  {
+    label: '일',
+    id: 'work',
+  },
+  {
+    label: '취미',
+    id: 'hobby',
+  },
+  {
+    label: '기타',
+    id: 'etc',
+  },
+]
+const { data: post } = await useFetch(`/api/v1/post`, {
+  query: {
+    postNo: route.params.postNo,
+  },
+})
 
 definePageMeta({
   layout: false,
   middleware: 'check-edit',
-})
-
-defineShortcuts({
-  escape: {
-    usingInput: true,
-    whenever: [isPostSettingOpen],
-    handler: () => { isPostSettingOpen.value = false },
-  },
 })
 
 const isDark = computed({
@@ -25,12 +46,6 @@ const isDark = computed({
   },
   set() {
     colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-  },
-})
-
-const { data: post } = await useFetch(`/api/v1/post`, {
-  query: {
-    postNo: route.params.postNo,
   },
 })
 
@@ -55,6 +70,7 @@ async function editPost() {
       post_json: post.value.post_json,
       is_public: post.value.is_public,
       description: post.value.description,
+      pin: selectedPinList.value.map(pin => pin.id),
     }
 
     await $fetch(`/api/v1/post`, {
@@ -62,12 +78,7 @@ async function editPost() {
         postNo: route.params.postNo,
       },
       method: 'PATCH',
-      body: {
-        title: postObject.title,
-        post_json: postObject.post_json,
-        is_public: postObject.is_public,
-        description: postObject.description,
-      },
+      body: postObject,
     })
   }
   catch (e) {
@@ -78,6 +89,16 @@ async function editPost() {
     navigateTo(`/post/${route.params.postNo}`)
   }
 }
+
+onMounted(() => {
+  if (post.value && post.value.pin) {
+    post.value.pin.forEach((pinId) => {
+      const pin = pinList.find(p => p.id === pinId)
+      if (pin)
+        selectedPinList.value?.push(pin)
+    })
+  }
+})
 </script>
 
 <template>
@@ -169,23 +190,50 @@ async function editPost() {
         <div
           class="flex items-center justify-between"
         >
-          <p class="text-sm text-gray-500 dark:text-gray-300">
+          <p class="text-sm">
             공개 여부
           </p>
           <UToggle
             v-model="post.is_public"
           />
         </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-sm text-gray-500 dark:text-gray-300">
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
             노트 설명
           </p>
           <UTextarea
             v-model="post.description"
             placeholder="노트에 대한 설명을 입력하세요."
             icon="i-heroicons-envelope"
+            size="lg"
             autoresize
           />
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
+            노트 핀
+          </p>
+          <USelectMenu
+            v-model="selectedPinList"
+            :options="pinList"
+            multiple
+          >
+            <template #label>
+              <span
+                v-if="selectedPinList.length"
+                class="truncate space-x-1"
+              >
+                <UBadge
+                  v-for="(pin, index) in selectedPinList"
+                  :key="index"
+                  :ui="{ rounded: 'rounded-full' }"
+                >
+                  {{ pin.label }}
+                </UBadge>
+              </span>
+              <span v-else>핀을 선택해 주세요</span>
+            </template>
+          </USelectMenu>
         </div>
       </div>
       <template #footer>
