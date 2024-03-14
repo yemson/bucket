@@ -20,15 +20,27 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { error } = await client
+  const { error: likesError } = await client
+    .from('likes')
+    .delete()
+    .eq('post_id', query.postNo)
+
+  if (likesError) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: likesError.message,
+    })
+  }
+
+  const { error: postsError } = await client
     .from('posts')
     .delete()
     .eq('id', query.postNo)
 
-  if (error) {
+  if (postsError) {
     throw createError({
       statusCode: 500,
-      statusMessage: error.message,
+      statusMessage: postsError.message,
     })
   }
   else {

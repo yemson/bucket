@@ -14,18 +14,21 @@ export interface Database {
           created_at: string
           id: number
           post_id: number
+          post_user_id: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
           post_id: number
+          post_user_id?: string | null
           user_id?: string
         }
         Update: {
           created_at?: string
           id?: number
           post_id?: number
+          post_user_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -41,8 +44,10 @@ export interface Database {
       posts: {
         Row: {
           created_at: string
+          description: string | null
           id: number
           is_public: boolean
+          pin: string[] | null
           post_json: Json | null
           title: string | null
           updated_at: string | null
@@ -50,8 +55,10 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          description?: string | null
           id?: number
           is_public?: boolean
+          pin?: string[] | null
           post_json?: Json | null
           title?: string | null
           updated_at?: string | null
@@ -59,8 +66,10 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          description?: string | null
           id?: number
           is_public?: boolean
+          pin?: string[] | null
           post_json?: Json | null
           title?: string | null
           updated_at?: string | null

@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     .from('posts')
     .select('*', { count: 'exact' })
     .eq('is_public', true)
-    .select('id, title, profiles (email, nickname)')
+    .select('id, title, description, profiles (email, nickname)')
     .order('created_at', { ascending: false })
     .range(startPage, endPage)
 

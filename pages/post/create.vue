@@ -1,15 +1,44 @@
 <script setup lang="ts">
+interface Pin {
+  label: string
+  id: string
+}
+
+const colorMode = useColorMode()
+const content = ref('')
+const title = ref('')
+const description = ref('')
+const isPublic = ref(true)
+const isCreatePostLoading = ref(false)
+const isPostSettingOpen = ref(false)
+const selectedPinList = ref<Pin[]>([])
+const pinList = [
+  {
+    label: '일상',
+    id: 'daily',
+  },
+  {
+    label: '공부',
+    id: 'study',
+  },
+  {
+    label: '일',
+    id: 'work',
+  },
+  {
+    label: '취미',
+    id: 'hobby',
+  },
+  {
+    label: '기타',
+    id: 'etc',
+  },
+]
+
 definePageMeta({
   layout: false,
   middleware: 'auth',
 })
-
-const colorMode = useColorMode()
-
-const content = ref('')
-const title = ref('')
-const isPublic = ref(true)
-const isCreatePostLoading = ref(false)
 
 const isDark = computed({
   get() {
@@ -36,6 +65,8 @@ async function createPost() {
       title: title.value,
       post_json: content.value,
       is_public: isPublic.value,
+      description: description.value,
+      pin: selectedPinList.value.map(pin => pin.id),
     }
 
     await $fetch('/api/v1/post', {
@@ -74,45 +105,15 @@ async function createPost() {
           <USkeleton class="w-8 h-8" />
         </template>
       </ClientOnly>
-      <UButtonGroup
-        orientation="horizontal"
-      >
-        <UButton
-          label="출간"
-          icon="i-heroicons-document-text-20-solid"
-          variant="soft"
-          aria-label="출간하기"
-          :disabled="validateCreatePost"
-          :loading="isCreatePostLoading"
-          @click="createPost"
-        />
-        <ClientOnly>
-          <UPopover>
-            <UButton
-              icon="i-heroicons-chevron-down-20-solid"
-              variant="soft"
-              aria-label="더보기"
-            />
-            <template #panel>
-              <div class="flex gap-4 p-4">
-                <p>공개 여부</p>
-                <UToggle
-                  v-model="isPublic"
-                  class="self-center"
-                />
-              </div>
-            </template>
-          </UPopover>
-          <template #fallback>
-            <UButton
-              icon="i-heroicons-chevron-down-20-solid"
-              variant="soft"
-              aria-label="더보기"
-              disabled
-            />
-          </template>
-        </ClientOnly>
-      </UButtonGroup>
+      <UButton
+        label="출간"
+        icon="i-heroicons-document-text-20-solid"
+        variant="soft"
+        aria-label="출간하기"
+        :disabled="validateCreatePost"
+        :loading="isCreatePostLoading"
+        @click="isPostSettingOpen = true"
+      />
     </div>
   </header>
 
@@ -139,4 +140,87 @@ async function createPost() {
       <p>에디터 불러오는 중...</p>
     </template>
   </ClientOnly>
+
+  <USlideover
+    v-model="isPostSettingOpen"
+    prevent-close
+  >
+    <UCard
+      class="flex flex-col flex-1"
+      :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+    >
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+            노트 출간
+          </h3>
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-x-mark-20-solid"
+            class="-my-1"
+            @click="isPostSettingOpen = false"
+          />
+        </div>
+      </template>
+      <div class="flex flex-col gap-8">
+        <div class="flex items-center justify-between">
+          <p class="text-sm">
+            공개 여부
+          </p>
+          <UToggle
+            v-model="isPublic"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
+            노트 설명
+          </p>
+          <UTextarea
+            v-model="description"
+            placeholder="노트에 대한 설명을 입력하세요."
+            icon="i-heroicons-envelope"
+            size="lg"
+            autoresize
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
+            노트 핀
+          </p>
+          <USelectMenu
+            v-model="selectedPinList"
+            :options="pinList"
+            multiple
+          >
+            <template #label>
+              <span
+                v-if="selectedPinList.length"
+                class="truncate space-x-1"
+              >
+                <UBadge
+                  v-for="(pin, index) in selectedPinList"
+                  :key="index"
+                  :ui="{ rounded: 'rounded-full' }"
+                >
+                  {{ pin.label }}
+                </UBadge>
+              </span>
+              <span v-else>핀을 선택해 주세요</span>
+            </template>
+          </USelectMenu>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <UButton
+            label="출간하기"
+            color="primary"
+            :loading="isCreatePostLoading"
+            @click="createPost"
+          />
+        </div>
+      </template>
+    </UCard>
+  </USlideover>
 </template>

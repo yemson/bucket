@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import type { Content } from '@tiptap/core'
 
+const colorMode = useColorMode()
+const route = useRoute()
+const isEditPostLoading = ref(false)
+const isPostSettingOpen = ref(false)
+
 definePageMeta({
   layout: false,
   middleware: 'check-edit',
 })
 
-const colorMode = useColorMode()
-const route = useRoute()
-
-const isEditPostLoading = ref(false)
+defineShortcuts({
+  escape: {
+    usingInput: true,
+    whenever: [isPostSettingOpen],
+    handler: () => { isPostSettingOpen.value = false },
+  },
+})
 
 const isDark = computed({
   get() {
@@ -20,7 +28,7 @@ const isDark = computed({
   },
 })
 
-const { data: post } = useFetch(`/api/v1/post`, {
+const { data: post } = await useFetch(`/api/v1/post`, {
   query: {
     postNo: route.params.postNo,
   },
@@ -46,6 +54,7 @@ async function editPost() {
       title: post.value.title,
       post_json: post.value.post_json,
       is_public: post.value.is_public,
+      description: post.value.description,
     }
 
     await $fetch(`/api/v1/post`, {
@@ -57,6 +66,7 @@ async function editPost() {
         title: postObject.title,
         post_json: postObject.post_json,
         is_public: postObject.is_public,
+        description: postObject.description,
       },
     })
   }
@@ -91,49 +101,15 @@ async function editPost() {
           <USkeleton class="w-8 h-8" />
         </template>
       </ClientOnly>
-
-      <UButtonGroup
-        orientation="horizontal"
-      >
-        <UButton
-          label="출간"
-          icon="i-heroicons-document-text-20-solid"
-          variant="soft"
-          aria-label="출간하기"
-          :disabled="!post?.title || !post?.post_json"
-          :loading="isEditPostLoading"
-          @click="editPost"
-        />
-        <ClientOnly>
-          <UPopover>
-            <UButton
-              icon="i-heroicons-chevron-down-20-solid"
-              variant="soft"
-              aria-label="더보기"
-            />
-            <template #panel>
-              <div
-                v-if="post"
-                class="flex gap-4 p-4"
-              >
-                <p>공개 여부</p>
-                <UToggle
-                  v-model="post.is_public"
-                  class="self-center"
-                />
-              </div>
-            </template>
-          </UPopover>
-          <template #fallback>
-            <UButton
-              icon="i-heroicons-chevron-down-20-solid"
-              variant="soft"
-              aria-label="더보기"
-              disabled
-            />
-          </template>
-        </ClientOnly>
-      </UButtonGroup>
+      <UButton
+        label="출간"
+        icon="i-heroicons-document-text-20-solid"
+        variant="soft"
+        aria-label="출간하기"
+        :disabled="!post?.title || !post?.post_json"
+        :loading="isEditPostLoading"
+        @click="isPostSettingOpen = true"
+      />
     </div>
   </header>
 
@@ -163,4 +139,65 @@ async function editPost() {
       <p>에디터 불러오는 중...</p>
     </template>
   </ClientOnly>
+
+  <USlideover
+    v-model="isPostSettingOpen"
+    prevent-close
+  >
+    <UCard
+      class="flex flex-col flex-1"
+      :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+    >
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+            노트 출간
+          </h3>
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-x-mark-20-solid"
+            class="-my-1"
+            @click="isPostSettingOpen = false"
+          />
+        </div>
+      </template>
+      <div
+        v-if="post"
+        class="flex flex-col gap-8"
+      >
+        <div
+          class="flex items-center justify-between"
+        >
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            공개 여부
+          </p>
+          <UToggle
+            v-model="post.is_public"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            노트 설명
+          </p>
+          <UTextarea
+            v-model="post.description"
+            placeholder="노트에 대한 설명을 입력하세요."
+            icon="i-heroicons-envelope"
+            autoresize
+          />
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <UButton
+            label="출간하기"
+            color="primary"
+            :loading="isEditPostLoading"
+            @click="editPost"
+          />
+        </div>
+      </template>
+    </UCard>
+  </USlideover>
 </template>
