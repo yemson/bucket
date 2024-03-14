@@ -6,7 +6,6 @@ definePageMeta({
 })
 
 const user = useSupabaseUser()
-
 const dayjs = useDayjs()
 const route = useRoute()
 const isEditModalOpen = ref(false)
@@ -26,7 +25,6 @@ const settingItems = [
     icon: 'i-heroicons-trash',
   }],
 ]
-
 const { data: post, pending } = await useFetch(`/api/v1/post`, {
   query: {
     postNo: route.params.postNo,
@@ -85,6 +83,13 @@ async function likePost() {
 useHead(() => {
   return {
     title: post.value?.title,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: post.value?.description,
+      },
+    ],
   }
 })
 </script>

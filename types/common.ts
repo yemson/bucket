@@ -8,3 +8,8 @@ export interface SimplePost {
     nickname: string
   }
 }
+
+export interface Pin {
+  id: string
+  label: string
+}
