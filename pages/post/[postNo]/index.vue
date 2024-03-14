@@ -67,8 +67,9 @@ async function likePost() {
     }
     else {
       await $fetch(`/api/v1/post/like`, {
-        query: {
-          postNo: route.params.postNo,
+        body: {
+          postNo: +route.params.postNo,
+          postUserId: post.value?.user_id,
         },
         method: 'POST',
       })
@@ -221,14 +222,12 @@ useHead(() => {
   </ClientOnly>
   <UDivider class="my-4" />
   <div class="mb-2 space-x-2">
-    <UBadge :ui="{ rounded: 'rounded-full' }">
-      일상
-    </UBadge>
-    <UBadge :ui="{ rounded: 'rounded-full' }">
-      공부
-    </UBadge>
-    <UBadge :ui="{ rounded: 'rounded-full' }">
-      자기개발
+    <UBadge
+      v-for="pin in post?.pin"
+      :key="pin"
+      :ui="{ rounded: 'rounded-full' }"
+    >
+      {{ getPinName(pin) }}
     </UBadge>
   </div>
 </template>

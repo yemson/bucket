@@ -1,4 +1,9 @@
 <script setup lang="ts">
+interface Pin {
+  label: string
+  id: string
+}
+
 const colorMode = useColorMode()
 const content = ref('')
 const title = ref('')
@@ -6,18 +11,33 @@ const description = ref('')
 const isPublic = ref(true)
 const isCreatePostLoading = ref(false)
 const isPostSettingOpen = ref(false)
+const selectedPinList = ref<Pin[]>([])
+const pinList = [
+  {
+    label: '일상',
+    id: 'daily',
+  },
+  {
+    label: '공부',
+    id: 'study',
+  },
+  {
+    label: '일',
+    id: 'work',
+  },
+  {
+    label: '취미',
+    id: 'hobby',
+  },
+  {
+    label: '기타',
+    id: 'etc',
+  },
+]
 
 definePageMeta({
   layout: false,
   middleware: 'auth',
-})
-
-defineShortcuts({
-  escape: {
-    usingInput: true,
-    whenever: [isPostSettingOpen],
-    handler: () => { isPostSettingOpen.value = false },
-  },
 })
 
 const isDark = computed({
@@ -46,6 +66,7 @@ async function createPost() {
       post_json: content.value,
       is_public: isPublic.value,
       description: description.value,
+      pin: selectedPinList.value.map(pin => pin.id),
     }
 
     await $fetch('/api/v1/post', {
@@ -144,23 +165,50 @@ async function createPost() {
       </template>
       <div class="flex flex-col gap-8">
         <div class="flex items-center justify-between">
-          <p class="text-sm text-gray-500 dark:text-gray-300">
+          <p class="text-sm">
             공개 여부
           </p>
           <UToggle
             v-model="isPublic"
           />
         </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-sm text-gray-500 dark:text-gray-300">
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
             노트 설명
           </p>
           <UTextarea
             v-model="description"
             placeholder="노트에 대한 설명을 입력하세요."
             icon="i-heroicons-envelope"
+            size="lg"
             autoresize
           />
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
+            노트 핀
+          </p>
+          <USelectMenu
+            v-model="selectedPinList"
+            :options="pinList"
+            multiple
+          >
+            <template #label>
+              <span
+                v-if="selectedPinList.length"
+                class="truncate space-x-1"
+              >
+                <UBadge
+                  v-for="(pin, index) in selectedPinList"
+                  :key="index"
+                  :ui="{ rounded: 'rounded-full' }"
+                >
+                  {{ pin.label }}
+                </UBadge>
+              </span>
+              <span v-else>핀을 선택해 주세요</span>
+            </template>
+          </USelectMenu>
         </div>
       </div>
       <template #footer>
