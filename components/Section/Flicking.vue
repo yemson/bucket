@@ -25,7 +25,7 @@ const user = useSupabaseUser()
 const model = defineModel('loading')
 const plugin = ref([new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: true })])
 const options = ref({
-  // renderOnlyVisible: true,
+  renderOnlyVisible: true,
   circular: true,
   align: 'prev',
 })
