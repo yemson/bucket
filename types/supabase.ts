@@ -47,8 +47,8 @@ export interface Database {
           description: string | null
           id: number
           is_public: boolean
-          pin: string[] | null
           post_json: Json | null
+          tag: string[] | null
           title: string | null
           updated_at: string | null
           user_id: string
@@ -58,8 +58,8 @@ export interface Database {
           description?: string | null
           id?: number
           is_public?: boolean
-          pin?: string[] | null
           post_json?: Json | null
+          tag?: string[] | null
           title?: string | null
           updated_at?: string | null
           user_id?: string
@@ -69,8 +69,8 @@ export interface Database {
           description?: string | null
           id?: number
           is_public?: boolean
-          pin?: string[] | null
           post_json?: Json | null
+          tag?: string[] | null
           title?: string | null
           updated_at?: string | null
           user_id?: string

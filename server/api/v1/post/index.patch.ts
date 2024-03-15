@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
       description: body.description,
       post_json: body.post_json,
       is_public: body.is_public,
-      pin: body.pin,
+      tag: body.tag,
       updated_at: new Date().toISOString(),
     })
     .eq('id', query.postNo)

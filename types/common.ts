@@ -9,7 +9,7 @@ export interface SimplePost {
   }
 }
 
-export interface Pin {
+export interface Tag {
   id: string
   label: string
 }
