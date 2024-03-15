@@ -66,6 +66,7 @@ const { data: myPosts, pending: myPostsPending } = await useFetch('/api/v1/dashb
     v-model:loading="myPostsPending"
     visible-public-icon
     title="나의 노트"
+    to="/post/list/my"
     :posts="myPosts as SimplePost[]"
   />
   <SectionFlicking
