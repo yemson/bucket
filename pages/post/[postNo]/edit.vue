@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Content } from '@tiptap/core'
-import type { Pin } from '~/types/common'
+import type { Tag } from '~/types/common'
 
 const colorMode = useColorMode()
 const route = useRoute()
 const isEditPostLoading = ref(false)
 const isPostSettingOpen = ref(false)
-const selectedPinList = ref<Pin[]>([])
-const pinList = [
+const selectedTagList = ref<Tag[]>([])
+const tagList = [
   {
     label: '일상',
     id: 'daily',
@@ -70,7 +70,7 @@ async function editPost() {
       post_json: post.value.post_json,
       is_public: post.value.is_public,
       description: post.value.description,
-      pin: selectedPinList.value.map(pin => pin.id),
+      tag: selectedTagList.value.map(tag => tag.id),
     }
 
     await $fetch(`/api/v1/post`, {
@@ -91,11 +91,11 @@ async function editPost() {
 }
 
 onMounted(() => {
-  if (post.value && post.value.pin) {
-    post.value.pin.forEach((pinId) => {
-      const pin = pinList.find(p => p.id === pinId)
-      if (pin)
-        selectedPinList.value?.push(pin)
+  if (post.value && post.value.tag) {
+    post.value.tag.forEach((tagId) => {
+      const tag = tagList.find(t => t.id === tagId)
+      if (tag)
+        selectedTagList.value?.push(tag)
     })
   }
 })
@@ -214,21 +214,21 @@ onMounted(() => {
             노트 핀
           </p>
           <USelectMenu
-            v-model="selectedPinList"
-            :options="pinList"
+            v-model="selectedTagList"
+            :options="tagList"
             multiple
           >
             <template #label>
               <span
-                v-if="selectedPinList.length"
+                v-if="selectedTagList.length"
                 class="truncate space-x-1"
               >
                 <UBadge
-                  v-for="(pin, index) in selectedPinList"
+                  v-for="(tag, index) in selectedTagList"
                   :key="index"
                   :ui="{ rounded: 'rounded-full' }"
                 >
-                  {{ pin.label }}
+                  {{ tag.label }}
                 </UBadge>
               </span>
               <span v-else>핀을 선택해 주세요</span>

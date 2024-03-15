@@ -1,5 +1,5 @@
 <script setup lang="ts">
-interface Pin {
+interface Tag {
   label: string
   id: string
 }
@@ -11,8 +11,8 @@ const description = ref('')
 const isPublic = ref(true)
 const isCreatePostLoading = ref(false)
 const isPostSettingOpen = ref(false)
-const selectedPinList = ref<Pin[]>([])
-const pinList = [
+const selectedTagList = ref<Tag[]>([])
+const tagList = [
   {
     label: '일상',
     id: 'daily',
@@ -66,7 +66,7 @@ async function createPost() {
       post_json: content.value,
       is_public: isPublic.value,
       description: description.value,
-      pin: selectedPinList.value.map(pin => pin.id),
+      tag: selectedTagList.value.map(tag => tag.id),
     }
 
     await $fetch('/api/v1/post', {
@@ -189,21 +189,21 @@ async function createPost() {
             노트 핀
           </p>
           <USelectMenu
-            v-model="selectedPinList"
-            :options="pinList"
+            v-model="selectedTagList"
+            :options="tagList"
             multiple
           >
             <template #label>
               <span
-                v-if="selectedPinList.length"
+                v-if="selectedTagList.length"
                 class="truncate space-x-1"
               >
                 <UBadge
-                  v-for="(pin, index) in selectedPinList"
+                  v-for="(tag, index) in selectedTagList"
                   :key="index"
                   :ui="{ rounded: 'rounded-full' }"
                 >
-                  {{ pin.label }}
+                  {{ tag.label }}
                 </UBadge>
               </span>
               <span v-else>핀을 선택해 주세요</span>

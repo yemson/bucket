@@ -13,7 +13,7 @@ import { SpeedInsights } from '@vercel/speed-insights/nuxt'
       </div>
     </section>
     <footer class="flex justify-center items-center h-16">
-      <p class="text-sm dark:text-gray-300">
+      <p class="text-[10px] dark:text-gray-300 text-gray-500">
         © 2023 노트잇!. All rights reserved.
       </p>
     </footer>

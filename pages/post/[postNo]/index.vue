@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Content } from '@tiptap/core'
+import { getTagName } from '~/utils'
 
 definePageMeta({
   middleware: 'check-public',
@@ -155,18 +156,6 @@ useHead(() => {
             />
           </UDropdown>
         </div>
-        <div v-else>
-          <UTooltip
-            :text="`${post?.likes.length}`"
-            :popper="{ arrow: true }"
-          >
-            <UButton
-              :icon="post?.likes.includes(user?.id) ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'"
-              variant="ghost"
-              @click="likePost"
-            />
-          </UTooltip>
-        </div>
       </template>
     </div>
     <div
@@ -226,13 +215,23 @@ useHead(() => {
     </template>
   </ClientOnly>
   <UDivider class="my-4" />
-  <div class="mb-2 space-x-2">
+  <div class="space-x-2">
     <UBadge
-      v-for="pin in post?.pin"
-      :key="pin"
+      v-for="tag in post?.tag"
+      :key="tag"
       :ui="{ rounded: 'rounded-full' }"
     >
-      {{ getPinName(pin) }}
+      {{ getTagName(tag) }}
     </UBadge>
   </div>
+
+  <UButton
+    v-if="user?.id !== post?.user_id"
+    class="fixed bottom-4 right-4 xl:right-40 rounded-full"
+    variant="soft"
+    size="xl"
+    :icon="post?.likes.includes(user?.id) ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'"
+    aria-label="좋아요"
+    @click="likePost"
+  />
 </template>
