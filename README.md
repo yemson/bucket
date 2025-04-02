@@ -40,8 +40,8 @@
 
 1. 저장소 복제
    ```bash
-   git clone https://github.com/your-username/note-it.git
-   cd note-it
+   git clone https://github.com/yemson/bucket.git
+   cd bucket
    ```
 
 2. 의존성 설치
